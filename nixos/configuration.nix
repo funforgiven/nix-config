@@ -59,13 +59,24 @@
     };
   };
 
-  networking.hostName = "rooftrollen";
+  networking = {
+    hostName = "rooftrollen";
+    networkmanager.enable = true;
+  };
 
-  boot.loader.grub.enable = true;
-  boot.loader.grub.devices = [ "nodev" ];
-  boot.loader.grub.efiInstallAsRemovable = true;
-  boot.loader.grub.efiSupport = true;
-  boot.loader.grub.useOSProber = true;
+  boot = {
+    loader = {
+      systemd-boot.enable = false;
+      
+      grub = {
+        enable = true;
+        version = 2;
+        device = "nodev";
+        efiSupport = true;
+        useOSProber = true;
+      };
+    };
+  }; 
 
   users.users = {
     funforgiven = {
@@ -82,10 +93,10 @@
   # Feel free to remove if you don't need it.
   services.openssh = {
     enable = true;
-    # Forbid root login through SSH.
-    permitRootLogin = "no";
-    # Use keys only. Remove if you want to SSH using password (not recommended)
-    passwordAuthentication = false;
+    settings = {
+      PermitRootLogin = "no";
+      PasswordAuthentication = false;
+    };
   };
 
   # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
