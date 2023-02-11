@@ -1,6 +1,7 @@
 { inputs, pkgs, ... }: {
   imports = [
     ./global
-    ./global/features/desktop/awesome
+    ./features/desktop/awesome
+    ./features/games
   ];
 }
