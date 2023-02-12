@@ -9,9 +9,12 @@
     ./tailscale.nix
     ./nix.nix
     ./steam-hardware.nix
-    ./pipewire.nix
-    ./grub.nix
-    ./awesome.nix
+    ./services.nix
+    ./networking.nix
+    ./fonts.nix
+    ./security.nix
+    ./programs.nix
+    ./environment.nix
   ] ++ (builtins.attrValues outputs.nixosModules);
 
   home-manager = {
@@ -25,23 +28,4 @@
       allowUnfree = true;
     };
   };
-
-  programs.fuse.userAllowOther = true;
-  hardware.enableRedistributableFirmware = true;
-  networking.domain = "m7.rs";
-
-  security.pam.loginLimits = [
-    {
-      domain = "@wheel";
-      item = "nofile";
-      type = "soft";
-      value = "524288";
-    }
-    {
-      domain = "@wheel";
-      item = "nofile";
-      type = "hard";
-      value = "1048576";
-    }
-  ];
 }

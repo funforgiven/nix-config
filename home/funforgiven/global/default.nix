@@ -1,5 +1,11 @@
-{ inputs, lib, pkgs, config, outputs, ... }:
-{
+{ inputs, lib, pkgs, config, outputs, ... }: let inherit (inputs.nix-colors) colorSchemes;
+in {
+  imports =
+    [
+      inputs.nix-colors.homeManagerModule
+    ]
+    ++ (builtins.attrValues outputs.homeManagerModules);
+
   nixpkgs = {
     overlays = builtins.attrValues outputs.overlays;
     config = {
@@ -28,5 +34,8 @@
     homeDirectory = "/home/${config.home.username}";
     stateVersion = "23.05";
   };
+
+  colorscheme = colorSchemes.ashes;
+  home.file.".colorscheme".text = config.colorscheme.slug;
 }
 
