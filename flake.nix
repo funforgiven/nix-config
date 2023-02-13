@@ -4,9 +4,7 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-master.url = "github:nixos/nixpkgs/master";
-    nix-colors.url = "github:misterio77/nix-colors";
     nur.url = "github:nix-community/NUR";
-    nixpkgs-f2k.url = "github:fortuneteller2k/nixpkgs-f2k";
 
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -26,7 +24,6 @@
       ];
     in
     rec {
-
       packages = forAllSystems (system:
         let pkgs = nixpkgs.legacyPackages.${system};
         in import ./pkgs { inherit pkgs; }

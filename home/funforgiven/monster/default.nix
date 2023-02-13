@@ -1,15 +1,14 @@
 { inputs, lib, config, pkgs, ... }: {
   imports = [
-    ../global
+    ../../funforgiven
+
     ./packages.nix
     ./firefox.nix
     ./discord.nix
     ./wezterm.nix
-    ./steam.nix
+    ./gaming.nix
     ./rofi.nix
-    ./desktop.nix
-    ./picom.nix
   ];
 
-    xdg.mimeApps.enable = true;
+  xdg.mimeApps.enable = true;
 }

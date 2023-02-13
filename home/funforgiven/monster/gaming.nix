@@ -20,5 +20,6 @@ in
     steam-with-pkgs
     gamescope
     protontricks
+    lutris
   ];
 }

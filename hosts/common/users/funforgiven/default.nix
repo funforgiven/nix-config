@@ -27,5 +27,5 @@ in
     ];
   };
 
-  home-manager.users.funforgiven = import home/${config.networking.hostName}/default.nix;
+  home-manager.users.funforgiven = import home/${config.networking.hostName};
 }

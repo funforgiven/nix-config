@@ -1,6 +1,6 @@
 { inputs, outputs, lib, config, pkgs, ... }: {
   imports = [
-    ../common/global
+    ../common
     ../common/users/funforgiven
 
     ./hardware-configuration.nix
@@ -9,13 +9,6 @@
   networking.hostName = "monster";
 
   boot = {
-
-    initrd = {
-      systemd.enable = true;
-      supportedFilesystems = ["btrfs"];
-    };
-
-    kernelModules = ["acpi_call"];
     kernelPackages = pkgs.linuxKernel.packages.linux_zen;
     loader.grub = {
       enable = true;
@@ -29,46 +22,27 @@
     systemPackages = lib.attrValues{
         inherit
         (pkgs)
-        acpi
-        arandr
-        blueberry
-        brightnessctl
         libva
         libva-utils
-        ocl-icd
-        slop
         vulkan-loader
         vulkan-validation-layers
         vulkan-tools
+        ocl-icd
         ;
     };
   };
 
   hardware = {
     enableRedistributableFirmware = true;
-    bluetooth = {
-      enable = true;
-      package = pkgs.bluez;
-    };
+    bluetooth.enable = true;
 
     nvidia = {
-      open = true;
       modesetting.enable = true;
-      powerManagement = {
-        enable = true;
-        finegrained = true;
-      };
 
       prime = {
+        offload.enable = true;
         intelBusId = "PCI:0:2:0";
         nvidiaBusId = "PCI:1:0:0";
-
-        offload = {
-          enable = true;
-          enableOffloadCmd = true;
-        };
-
-        reverseSync.enable = true;
       };
     };
 
@@ -89,43 +63,31 @@
     };
   };
 
-  services = {
-    acpid.enable = true;
-    blueman.enable = true;
-    thermald.enable = true;
-    upower.enable = true;
-
-    tlp = {
-      enable = true;
-      settings = {
-        START_CHARGE_THRESH_BAT0 = 0; # dummy value
-        STOP_CHARGE_THRESH_BAT0 = 1; # battery conservation mode
-        CPU_BOOST_ON_AC = 1;
-        CPU_BOOST_ON_BAT = 0;
-        CPU_SCALING_GOVERNOR_ON_AC = "performance";
-        CPU_SCALING_GOVERNOR_ON_BAT = "powersave";
-      };
+  services.xserver = {
+    enable = true;
+    displayManager = {
+      sddm.enable = true;
     };
-
-    xserver = {
-      enable = true;
-      displayManager = {
-        sddm.enable = true;
-      };
-      layout = "tr";
-      videoDrivers = ["nvidia"];
-      windowManager = {
-        awesome = {
-          enable = true;
-
-          luaModules = lib.attrValues {
-            inherit (pkgs.luaPackages) lgi ldbus luadbi-mysql luaposix;
-          };
-        };
-      };
+    desktopManager = {
+      plasma5.enable = true;
     };
+    layout = "tr";
+    videoDrivers = ["nvidia"];
   };
 
+  services.logind = {
+    lidSwitch = "lock";
+  };
+
+  security.rtkit.enable = true;
+  services.pipewire = {
+      enable = true;
+      wireplumber.enable = true;
+      pulse.enable = true;
+      jack.enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+  };
 
   system.stateVersion = "23.05";
 }
