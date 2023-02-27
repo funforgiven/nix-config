@@ -30,6 +30,12 @@
       fsType = "btrfs";
       options = [ "subvol=home" "compress-force=zstd" "discard=async" ];
     };
+
+  fileSystems."/hdd" =
+    { device = "/dev/disk/by-uuid/f48e7337-2f24-4ad1-a0b4-41ab78140bd8";
+      fsType = "btrfs";
+      options = [ "compress-force=zstd" ];
+    };
   
   fileSystems."/boot" =
     { device = "/dev/disk/by-uuid/7AD0-1C56";

@@ -2,10 +2,9 @@
 let ifTheyExist = groups: builtins.filter (group: builtins.hasAttr group config.users.groups) groups;
 in
 {
-  users.mutableUsers = true;
   users.users.funforgiven = {
     isNormalUser = true;
-    initialPassword = "correcthorsebatterystaple";
+    initialPassword = "235";
     shell = pkgs.zsh;
     extraGroups = [
       "wheel"
@@ -23,8 +22,7 @@ in
       "deluge"
     ];
 
-    openssh.authorizedKeys.keys = [
-    ];
+    packages = [ pkgs.home-manager ];
   };
 
   home-manager.users.funforgiven = import home/${config.networking.hostName};

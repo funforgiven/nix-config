@@ -1,4 +1,14 @@
-{ inputs, outputs, lib, config, pkgs, ... }: {
+{ inputs, outputs, lib, config, pkgs, ... }:
+let
+  prime-run = pkgs.writeShellScriptBin "prime-run" ''
+    export __NV_PRIME_RENDER_OFFLOAD=1
+    export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
+    export __GLX_VENDOR_LIBRARY_NAME=nvidia
+    export __VK_LAYER_NV_optimus=NVIDIA_only
+    exec "$@"
+  '';
+in
+{
   imports = [
     ../common
     ../common/users/funforgiven
@@ -18,6 +28,11 @@
     };
   }; 
 
+  programs = {
+    dconf.enable = true;
+    gamemode.enable = true;
+  };
+
   environment = {
     systemPackages = lib.attrValues{
         inherit
@@ -28,8 +43,9 @@
         vulkan-validation-layers
         vulkan-tools
         ocl-icd
+        glxinfo
         ;
-    };
+    } ++ [ prime-run ];
   };
 
   hardware = {
@@ -37,6 +53,7 @@
     bluetooth.enable = true;
 
     nvidia = {
+      package = config.boot.kernelPackages.nvidiaPackages.stable;
       modesetting.enable = true;
 
       prime = {
@@ -63,22 +80,28 @@
     };
   };
 
+  services = {
+    gnome.core-utilities.enable = true;
+    udev.packages = with pkgs; [ gnome.gnome-settings-daemon ];
+  };
+
   services.xserver = {
     enable = true;
     displayManager = {
-      sddm.enable = true;
+      gdm.enable = true;
     };
     desktopManager = {
-      plasma5.enable = true;
+      gnome.enable = true;
     };
-    layout = "tr";
-    videoDrivers = ["nvidia"];
+    layout = "us";
+    videoDrivers = [ "nvidia" ];
   };
 
   services.logind = {
     lidSwitch = "lock";
   };
 
+  hardware.pulseaudio.enable = false;
   security.rtkit.enable = true;
   services.pipewire = {
       enable = true;

@@ -26,9 +26,9 @@
   };
 
   home = {
-    username = "funforgiven";
-    homeDirectory = "/home/${config.home.username}";
-    stateVersion = "23.05";
+    username = lib.mkDefault "funforgiven";
+    homeDirectory = lib.mkDefault "/home/${config.home.username}";
+    stateVersion = lib.mkDefault "23.05";
   };
 }
 

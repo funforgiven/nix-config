@@ -1,5 +1,5 @@
 { config, pkgs, ... }: {
-  programs.wezterm = {
+  programs.kitty = {
     enable = true;
   };
 }
